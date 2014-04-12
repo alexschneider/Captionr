@@ -1,0 +1,61 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-top-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Caption</a>
+        </div>
+        <div class="collapse navbar-collapse" id="collapse-top-navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="/browse">Browse</a></li>
+                <li class="active"><a href="/create">Create</a></li>
+            </ul>
+        </div> <!-- collapse-top-navbar -->
+    </div> <!-- container-fluid -->
+</nav>
+
+<div class="container-fluid">
+    <div class="input-group">
+        <span class="input-group-addon">Youtube Link</span>
+        <input type="text" class="form-control" id="youtubeLink" placeholder="Enter youtube link">
+        <span class="input-group-btn"><button class="btn btn-default" type="button" id="load">Load Video</button></span>
+    </div>
+    <div id="errorAlert" class="alert alert-danger" style="display: none">
+        <strong>ERROR</strong> Invalid Youtube URL. Please try again.
+    </div>
+    <div id="videoTextDisplay" style="display: none">
+        <div id="videoContainer"></div>
+        <form role="form" method="post">
+            <div class="form-group">
+                <label for="transcript">Transcript</label>
+                <textarea name="transcript" class="form-control" rows="5" placeholder="Copy and paste the transcript for the above video or enter it as you are watching. Use newlines to distinguish when the subtitles should be sepearte"></textarea>
+            </div>
+            <button class="btn btn-default" type="submit" id="submit">Submit transcript for processing</button>
+        </div>
+    </div> <!-- videoTextDisplay -->
+</div> <!-- container-fluid -->
+
+{% endblock %}
+
+{% block head %}
+
+{{super()}}
+{{fixes.ie8()}}
+
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+    {% include "js/create.js" %}
+</script>
+{% endblock %}
