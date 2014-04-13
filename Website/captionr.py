@@ -7,43 +7,43 @@ import os
 
 BASE_DIRECTORY_PATH = '../data'
 
-def create_app():
-    app = Flask(__name__)
-    Bootstrap(app)
 
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-    
-    @app.route('/browse/')
-    def browse():
-        return render_template('browse.html')
+app = Flask(__name__)
+Bootstrap(app)
 
-    @app.route('/create/', methods=["GET", "POST"])
-    def create():
-        if request.method == "POST":
-            transcript = request.form['transcript']
-            youtube_id = request.form['videoID']
-            subtitle = open('../data/subtitle/' + youtube_id + '.vtt', 'w+')
-            subtitle.write('')
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-            transcript_file = open('../data/transcript/' + youtube_id + '.txt', 'w+')
-            transcript_file.write(transcript)
-            Thread(target=handle_youtube, args=(youtube_id,)).start()
-            return redirect(url_for('play', video_id=youtube_id));
-        else:
-            return render_template('create.html')
+@app.route('/browse/')
+def browse():
+    return render_template('browse.html')
 
-    @app.route('/play/<video_id>/')
-    def play(video_id):
-        sub_file_name = BASE_DIRECTORY_PATH + '/subtitle/' + video_id + '.vtt'
-        if not os.path.isfile(sub_file_name):
-            return render_template('nosubs.html', vid=video_id)
-        elif os.path.getsize(sub_file_name) == 0:
-            return render_template('processing.html')
-        else:
-            return render_template('play.html', subfile=sub_file_name)
-    return app
+@app.route('/create/', methods=["GET", "POST"])
+def create():
+    if request.method == "POST":
+        transcript = request.form['transcript']
+        youtube_id = request.form['videoID']
+        subtitle = open('../data/subtitle/' + youtube_id + '.vtt', 'w+')
+        subtitle.write('')
+
+        transcript_file = open('../data/transcript/' + youtube_id + '.txt', 'w+')
+        transcript_file.write(transcript)
+        Thread(target=handle_youtube, args=(youtube_id,)).start()
+        return redirect(url_for('play', video_id=youtube_id));
+    else:
+        return render_template('create.html')
+
+@app.route('/play/<video_id>/')
+def play(video_id):
+    sub_file_name = BASE_DIRECTORY_PATH + '/subtitle/' + video_id + '.vtt'
+    if not os.path.isfile(sub_file_name):
+        return render_template('nosubs.html', vid=video_id)
+    elif os.path.getsize(sub_file_name) == 0:
+        return render_template('processing.html')
+    else:
+        return render_template('play.html', subfile=sub_file_name)
+return app
 
 
 def handle_youtube(video_id):
