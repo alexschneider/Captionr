@@ -2,15 +2,12 @@ package net.captionr;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,20 +93,12 @@ public class Watchr {
                 File child = dir.resolve(name).toFile();
                 
                 String ID = child.getName().split("\\.")[0];
-                URL audio = null;
-                
-                try {
-					audio = child.toURI().toURL();
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
                 
                 Path transcript = Paths.get(TXT_WATCH_PATH, ID + ".txt");
                 File subtitle = Paths.get(VTT_DROP_PATH, ID + ".vtt").toFile();
                 
                 try {
-					SubtitleGen.generateSubtitle(audio, transcript, subtitle);
+					SubtitleGen.generateSubtitle(child, transcript, subtitle);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
