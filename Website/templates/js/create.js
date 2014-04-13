@@ -12,6 +12,7 @@ var handleSuccessYoutubeID = function(id) {
     $("#errorAlert").hide();
     var htm = '<iframe width="425" height="349" src="http://www.youtube.com/embed/' + id + '?rel=0" frameborder="0" allowfullscreen ></iframe>';
     $('#videoContainer').html(htm);
+    $("#videoID").val(id);
     $('#videoTextDisplay').show();
 }
 

@@ -99,3 +99,8 @@ local.properties
 hs_err_pid*
 
 *~
+*.wav
+*.m4a
+*.txt
+*.vtt
+.idea/*
