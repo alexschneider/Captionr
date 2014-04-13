@@ -43,7 +43,6 @@ def play(video_id):
         return render_template('processing.html')
     else:
         return render_template('play.html', subfile=sub_file_name)
-return app
 
 
 def handle_youtube(video_id):
