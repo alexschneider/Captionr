@@ -24,8 +24,10 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <div id="videoContainer" class="row" style="top=40px; bottom=0; left=0; right=0; position: relative"></div>
+<div style="height: 50%">
+    <div id="videoContainer" class="row" style="height: 50%">
+    </div>
+    <div class="clearfix"></div>
 </div>
 {% endblock %}
 
@@ -33,7 +35,9 @@
 
 {{super()}}
 {{fixes.ie8()}}
-
+<style>
+html.body {height: 100%;}
+</style>
 {% endblock %}
 
 {% block scripts %}
