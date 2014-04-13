@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from flask_bootstrap import Bootstrap
 from threading import Thread
 from subprocess import call
@@ -53,7 +53,7 @@ def play(video_id):
 
 
 @app.route('/subtitle/<path:path>')
-def subtitle():
+def subtitle(path):
     return send_from_directory(SUBTITLE_PATH, path)
 
 def handle_youtube(video_id):
