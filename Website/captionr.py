@@ -63,6 +63,6 @@ def process_audio(path):
     call(["ffmpeg", "-i", path, "-sample_rate", "16000", wav_path, "-y"])
 
 if __name__ == '__main__':
-    create_app().run(debug=True)
+    app.run(debug=True)
 
 
