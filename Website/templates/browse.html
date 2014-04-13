@@ -22,8 +22,11 @@
     </div> <!-- container-fluid -->
 </nav>
 <div class="container-fluid">
-    <p>Splash!</p>
-    <p>This is a splash screen! Let's replace it with something fun!</p>
+    <ul>
+    {% for video in vid_list %}
+      <li><a href="/play/{{video[0]}}"><img src="{{ video[1] }}"></a></li>
+    {% endfor %}
+    </ul>
 </div>
 
 {% endblock %}

@@ -19,12 +19,9 @@ Bootstrap(app)
 def index():
     return render_template('index.html')
 
-@app.route('/browse/')
-def browse():
-    return render_template('browse.html')
-
 @app.route('/create/', methods=["GET", "POST"])
-def create():
+@app.route('/create/<blah>', methods=["GET"])
+def create(blah=False):
     if request.method == "POST":
         transcript = request.form['transcript']
         youtube_id = request.form['videoID']
@@ -41,20 +38,30 @@ def create():
 @app.route('/play/<video_id>/')
 def play(video_id):
     sub_file_name = SUBTITLE_PATH + video_id + '.vtt'
-    '''
     if not os.path.isfile(sub_file_name):
         return render_template('nosubs.html', vid=video_id)
     elif os.path.getsize(sub_file_name) == 0:
         return render_template('processing.html')
     else:
-        return render_template('play.html', subfile=sub_file_name, vid=video_id)
-    '''
-    return render_template('play.html', subfile=url_for('subtitle', path=(video_id + '.vtt')), vid=video_id)
+        return render_template('play.html', subfile=url_for('subtitle', path=(video_id + '.vtt')), vid=video_id)
+    
 
 
 @app.route('/subtitle/<path:path>')
 def subtitle(path):
     return send_from_directory(SUBTITLE_PATH, path)
+
+@app.route('/browse/')
+def browse():
+    videos_subed = os.listdir(SUBTITLE_PATH)
+    video_list = []
+    for x in videos_subed:
+        video = x[:x.rindex('.')]
+        thumbnail = pafy.new(video).thumb
+        video_list.append((video, thumbnail))
+    return render_template('browse.html', vid_list=video_list)
+
+
 
 def handle_youtube(video_id):
     path = download_youtube(video_id)
