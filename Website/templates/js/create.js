@@ -5,7 +5,7 @@ var getYoutubeVideoID = function(url) {
 
 var handleInvalidYoutubeID = function() {
     $("#errorAlert").show();
-    $('#videoContainer').hide();
+    $('#videoTextDisplay').hide();
 }
 
 var handleSuccessYoutubeID = function(id) {
