@@ -6,6 +6,10 @@ import pafy
 import os
 
 BASE_DIRECTORY_PATH = '../data'
+SUBTITLE_PATH = BASE_DIRECTORY_PATH + '/subtitle/'
+TRANSCIRPT_PATH = BASE_DIRECTORY_PATH + '/transcript/'
+AUDIO_STAGING_PATH = BASE_DIRECTORY_PATH + '/audio_staging/'
+AUDIO_PATH = BASE_DIRECTORY_PATH + '/audio'
 
 
 app = Flask(__name__)
@@ -27,7 +31,7 @@ def create():
         subtitle = open('../data/subtitle/' + youtube_id + '.vtt', 'w+')
         subtitle.write('')
 
-        transcript_file = open('../data/transcript/' + youtube_id + '.txt', 'w+')
+        transcript_file = open(TRANSCIRPT_PATH + youtube_id + '.txt', 'w+')
         transcript_file.write(transcript)
         Thread(target=handle_youtube, args=(youtube_id,)).start()
         return redirect(url_for('play', video_id=youtube_id));
@@ -36,14 +40,21 @@ def create():
 
 @app.route('/play/<video_id>/')
 def play(video_id):
-    sub_file_name = BASE_DIRECTORY_PATH + '/subtitle/' + video_id + '.vtt'
+    sub_file_name = SUBTITLE_PATH + video_id + '.vtt'
+    '''
     if not os.path.isfile(sub_file_name):
         return render_template('nosubs.html', vid=video_id)
     elif os.path.getsize(sub_file_name) == 0:
         return render_template('processing.html')
     else:
-        return render_template('play.html', subfile=sub_file_name)
+        return render_template('play.html', subfile=sub_file_name, vid=video_id)
+    '''
+    return render_template('play.html', subfile=url_for('subtitle', path=(video_id + '.vtt')), vid=video_id)
 
+
+@app.route('/subtitle/<path:path>')
+def subtitle():
+    return send_from_directory(SUBTITLE_PATH, path)
 
 def handle_youtube(video_id):
     path = download_youtube(video_id)
@@ -53,14 +64,14 @@ def handle_youtube(video_id):
 def download_youtube(video_id):
     video = pafy.new(video_id)
     best_audio = video.getbestaudio()
-    download_path = BASE_DIRECTORY_PATH + '/audio_staging/' + video_id + '.' + best_audio.extension
+    download_path = AUDIO_STAGING_PATH + video_id + '.' + best_audio.extension
     best_audio.download(quiet=True, filepath=download_path)
     return download_path
 def process_audio(path):
-    wav_path = path[:path.rindex('.')] + ".wav"
-    print(path)
-    print(wav_path)
-    call(["ffmpeg", "-i", path, "-sample_rate", "16000", wav_path, "-y"])
+    wav_file = path[path.rindex('/'):path.rindex('.')] + ".wav"
+    call(["ffmpeg", "-i", path, "-sample_rate", "16000", AUDIO_STAGING_PATH + wav_file, "-y"])
+    os.remove(path)
+    os.rename(AUDIO_STAGING_PATH + wav_file, AUDIO_PATH + wav_file)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,8 +1,9 @@
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/fixes.html" as fixes %}
-
-{% block content %}
-<nav class="navbar navbar-default" role="navigation">
+{% import "bootstrap/wtf.html" as wtf %}
+{% block navbar %}
+{{super()}}
+<div class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-top-navbar">
@@ -16,15 +17,16 @@
         <div class="collapse navbar-collapse" id="collapse-top-navbar">
             <ul class="nav navbar-nav">
                 <li><a href="/browse">Browse</a></li>
-                <li><a href="/create">Create</a></li>
+                <li class="active"><a href="/create">Create</a></li>
             </ul>
         </div> <!-- collapse-top-navbar -->
-    </div> <!-- container-fluid -->
-</nav>
-<div class="container-fluid">
-    <p>Splash!</p>
+    </div> <!-- container-fluid --> 
 </div>
-
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div id="videoContainer" class="row" style="top=40px; bottom=0; left=0; right=0; position: relative"></div>
+</div>
 {% endblock %}
 
 {% block head %}
@@ -32,4 +34,12 @@
 {{super()}}
 {{fixes.ie8()}}
 
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src='http://cdn.popcornjs.org/code/dist/popcorn-complete.min.js'></script>
+<script type="text/javascript">
+    {% include "js/play.js" %}
+</script>
 {% endblock %}
